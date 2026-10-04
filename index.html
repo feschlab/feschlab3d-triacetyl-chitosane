@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Triacétyl chitosane - FeschLab3D</title>
+<script type="module"
+  src="https://unpkg.com/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #8c8c8c; color: #f0ece5; display: flex; flex-direction: column; height: 100vh; }
+  header { padding: 10px 18px; display: flex; align-items: baseline; gap: 10px;
+    background: rgba(20,18,16,.85); border-bottom: 1px solid rgba(0,0,0,.25); }
+  header h1 { margin: 0; font-size: 16px; font-weight: 700; }
+  header .appli { color: #d98a52; font-weight: 800; }
+  model-viewer { flex: 1; width: 100%; min-height: 0; background: #8c8c8c; --poster-color: transparent; }
+  #controls { display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    padding: 9px 18px; background: rgba(20,18,16,.9); border-top: 1px solid rgba(0,0,0,.25); }
+  #controls .grp { display: flex; align-items: center; gap: 8px; }
+  #controls label { font-size: 13px; color: #e6ded2; }
+  #controls input[type=range] { width: 120px; accent-color: #d98a52; }
+  #controls button { background: rgba(255,255,255,.12); color: #f0ece5;
+    border: 1px solid rgba(255,255,255,.2); border-radius: 8px; padding: 6px 12px;
+    font-size: 13px; font-weight: 600; cursor: pointer; }
+  #controls button:hover { background: rgba(255,255,255,.2); }
+</style>
+</head>
+<body>
+<header><h1>Triacétyl chitosane</h1><span class="appli">FeschLab3D</span></header>
+<model-viewer id="mv" src="model.glb" alt="Triacétyl chitosane"
+  camera-controls interaction-prompt="none"
+  auto-rotate auto-rotate-delay="0" rotation-per-second="26deg"
+  shadow-intensity="0.35" shadow-softness="1"
+  exposure="1.05" tone-mapping="neutral" environment-image="neutral"
+  min-field-of-view="8deg" max-field-of-view="45deg"
+  ar ar-modes="webxr scene-viewer quick-look"></model-viewer>
+<div id="controls">
+  <div class="grp"><input type="checkbox" id="rot" checked>
+    <label for="rot">Autorotation</label></div>
+  <div class="grp"><label for="speed">Vitesse</label>
+    <input type="range" id="speed" min="0" max="90" value="26"></div>
+  <div class="grp"><button id="reset">Recadrer la vue</button></div>
+</div>
+<script>
+  const mv = document.getElementById('mv');
+  document.getElementById('rot').addEventListener('change', e => {
+    if (e.target.checked) mv.setAttribute('auto-rotate',''); else mv.removeAttribute('auto-rotate');
+  });
+  document.getElementById('speed').addEventListener('input', e => {
+    mv.setAttribute('rotation-per-second', e.target.value + 'deg');
+    if (document.getElementById('rot').checked) {
+      mv.removeAttribute('auto-rotate'); void mv.offsetWidth; mv.setAttribute('auto-rotate','');
+    }
+  });
+  document.getElementById('reset').addEventListener('click', () => {
+    mv.cameraOrbit = 'auto auto auto'; mv.fieldOfView = 'auto';
+    if (mv.jumpCameraToGoal) mv.jumpCameraToGoal();
+  });
+</script>
+</body>
+</html>
